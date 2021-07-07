@@ -1,5 +1,7 @@
 package com.sadadream.domain;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +26,14 @@ public class User {
     private String name;
 
     private String password;
+
+    private String phoneNumber;
+
+    private String address;
+
+    private Boolean sex;
+
+    private Date birthDate;
 
     @Builder.Default
     private boolean deleted = false;
