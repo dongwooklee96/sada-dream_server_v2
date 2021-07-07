@@ -1,5 +1,7 @@
 package com.sadadream.controllers;
 
+import javax.validation.Valid;
+
 import com.sadadream.application.AuthenticationService;
 import com.sadadream.dto.SessionRequestData;
 import com.sadadream.dto.SessionResponseData;
@@ -26,7 +28,7 @@ public class SessionController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SessionResponseData login(
-            @RequestBody SessionRequestData sessionRequestData
+            @Valid @RequestBody SessionRequestData sessionRequestData
     ) {
         String email = sessionRequestData.getEmail();
         String password = sessionRequestData.getPassword();

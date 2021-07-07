@@ -1,5 +1,8 @@
 package com.sadadream.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -8,7 +11,10 @@ import lombok.Getter;
 @Getter
 public class SessionRequestData {
     @ApiModelProperty(required = true, value = "이메일")
+    @Email
     private String email;
+
     @ApiModelProperty(required = true, value = "패스워드")
+    @NotBlank
     private String password;
 }
