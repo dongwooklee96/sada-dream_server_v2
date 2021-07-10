@@ -1,10 +1,13 @@
 package com.sadadream.dto;
 
+import java.util.Date;
+
 import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -13,7 +16,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class UserRegistrationData {
     @NotBlank
-    @Size(min = 3)
+    @Email
     @Mapping("email")
     private final String email;
 
@@ -22,7 +25,21 @@ public class UserRegistrationData {
     private final String name;
 
     @NotBlank
-    @Size(min = 4, max = 1024)
+    @Size(min = 8, max = 16)
     @Mapping("password")
     private final String password;
+
+    @NotBlank
+    @Mapping("phoneNumber")
+    private final String phoneNumber;
+
+    @NotBlank
+    @Mapping("address")
+    private final String address;
+
+    @Mapping("sex")
+    private final Boolean sex;
+
+    @Mapping("birthDate")
+    private final Date birthDate;
 }
