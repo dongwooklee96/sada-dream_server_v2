@@ -33,4 +33,8 @@ public class AuthenticationService {
         Claims claims = jwtUtil.decode(accessToken);
         return claims.get("userId", Long.class);
     }
+
+    public void test() {
+        System.out.println("test");
+    }
 }
