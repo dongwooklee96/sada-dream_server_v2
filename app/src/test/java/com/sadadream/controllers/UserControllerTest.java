@@ -8,6 +8,7 @@ import com.sadadream.dto.UserRegistrationData;
 import com.sadadream.errors.UserNotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -67,14 +68,21 @@ class UserControllerTest {
                 .willThrow(new UserNotFoundException(100L));
     }
 
+    @DisplayName("올바른 형식으로 유저 생성을 요청하였을 떄, 유저 생성 및 올바른 상태코드가 반환된다")
     @Test
     void registerUserWithValidAttributes() throws Exception {
         mockMvc.perform(
                 post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"tester@example.com\"," +
-                                "\"name\":\"Tester\",\"password\":\"test\"}")
-        )
+                        .content("{\n"
+                            + "  \"address\": \"서울특별시 흑석로 15\",\n"
+                            + "  \"birthDate\": \"1996-01-06\",\n"
+                            + "  \"email\": \"tester@example.com\",\n"
+                            + "  \"gender\": \"M\",\n"
+                            + "  \"name\": \"tester\",\n"
+                            + "  \"password\": \"pass1234\",\n"
+                            + "  \"phoneNumber\": \"pass1234\"\n"
+                            + "}"))
                 .andExpect(status().isCreated())
                 .andExpect(content().string(
                         containsString("\"id\":13")
@@ -83,7 +91,7 @@ class UserControllerTest {
                         containsString("\"email\":\"tester@example.com\"")
                 ))
                 .andExpect(content().string(
-                        containsString("\"name\":\"Tester\"")
+                        containsString("\"name\":\"tester\"")
                 ));
 
         verify(userService).registerUser(any(UserRegistrationData.class));
