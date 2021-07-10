@@ -1,16 +1,20 @@
 package com.sadadream.filters;
 
-import com.sadadream.application.AuthenticationService;
-import com.sadadream.errors.InvalidTokenException;
-
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+import com.sadadream.application.AuthenticationService;
+import com.sadadream.security.UserAuthentication;
 
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     private final AuthenticationService authenticationService;
@@ -22,34 +26,18 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (filterWithPathAndMethod(request)) {
-            chain.doFilter(request, response);
-            return;
-        }
 
         String authorization = request.getHeader("Authorization");
 
-        if (authorization == null) {
-            throw new InvalidTokenException("");
-        }
-        String accessToken = authorization.substring("Bearer ".length());
+        if (authorization != null) {
+            String accessToken = authorization.substring("Bearer ".length());
+            Long userId = authenticationService.parseToken(accessToken);
+            Authentication authentication = new UserAuthentication(userId);
 
-        authenticationService.parseToken(accessToken);
+            SecurityContext context = SecurityContextHolder.getContext();
+            context.setAuthentication(authentication);
+        }
 
         chain.doFilter(request, response);
     }
-
-    private boolean filterWithPathAndMethod(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        if (!path.startsWith("/products")) {
-            return true;
-        }
-
-        String method = request.getMethod();
-        if (method.equals("GET")) {
-            return true;
-        }
-
-		return method.equals("OPTIONS");
-	}
 }
