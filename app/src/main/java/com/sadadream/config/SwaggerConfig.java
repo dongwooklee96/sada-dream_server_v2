@@ -23,7 +23,7 @@ public class SwaggerConfig {
     private static final Contact DEFAULT_CONTACT = new Contact("Dong Wook Lee", "https://dongwooklee96.github.io/",
         "sh95119@gmail.com");
 
-    private static final ApiInfo DEFAULT_API_INFO = new ApiInfo("Awesome API Title",
+    private static final ApiInfo DEFAULT_API_INFO = new ApiInfo("사다드림 API V1",
         "My User management REST API service", "1.0", "urn:tos",
         DEFAULT_CONTACT, "Apache 2.0", "https://apache.org/licenses/LICENSE-2.0", new ArrayList<>());
 
