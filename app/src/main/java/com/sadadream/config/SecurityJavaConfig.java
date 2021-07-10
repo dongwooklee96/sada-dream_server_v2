@@ -1,8 +1,6 @@
 package com.sadadream.config;
 
-import com.sadadream.application.AuthenticationService;
-import com.sadadream.filters.AuthenticationErrorFilter;
-import com.sadadream.filters.JwtAuthenticationFilter;
+import javax.servlet.Filter;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -12,7 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
-import javax.servlet.Filter;
+import com.sadadream.application.AuthenticationService;
+import com.sadadream.filters.AuthenticationErrorFilter;
+import com.sadadream.filters.JwtAuthenticationFilter;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)

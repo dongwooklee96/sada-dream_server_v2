@@ -13,6 +13,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 @Entity
 @Getter
 @Builder
@@ -27,7 +29,8 @@ public class User {
 
     private String name;
 
-    private String password;
+    @Builder.Default
+    private String password = "";
 
     private String phoneNumber;
 
@@ -43,14 +46,17 @@ public class User {
 
     public void changeWith(User source) {
         name = source.name;
-        password = source.password;
+    }
+
+    public void changePassword(String password, PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(password);
     }
 
     public void destroy() {
-        deleted = true;
+        this.deleted = true;
     }
 
-    public boolean authenticate(String password) {
-        return !deleted && password.equals(this.password);
+    public boolean authenticate(String password, PasswordEncoder passwordEncoder) {
+        return !this.deleted && passwordEncoder.matches(password, this.password);
     }
 }

@@ -7,6 +7,8 @@ import com.sadadream.dto.UserRegistrationData;
 import com.sadadream.errors.UserEmailDuplicationException;
 import com.sadadream.errors.UserNotFoundException;
 import com.github.dozermapper.core.Mapper;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,10 +18,12 @@ import javax.transaction.Transactional;
 public class UserService {
     private final Mapper mapper;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(Mapper dozerMapper, UserRepository userRepository) {
+    public UserService(Mapper dozerMapper, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.mapper = dozerMapper;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User registerUser(UserRegistrationData registrationData) {
@@ -29,6 +33,9 @@ public class UserService {
         }
 
         User user = mapper.map(registrationData, User.class);
+
+        user.changePassword(registrationData.getPassword(), passwordEncoder);
+
         return userRepository.save(user);
     }
 
