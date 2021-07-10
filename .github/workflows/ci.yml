@@ -15,7 +15,23 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+
+      - name: Enter Application
+        run: cd ~/app
+
+      - name: Show Directory
+        run: ls
+
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x ./gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
+
       - name: Test with Gradle
         run: ./gradlew test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_SECRET }}
+          file: ./build/reports/jacoco/test/jacocoTestReport.xml
