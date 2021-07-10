@@ -3,6 +3,8 @@ package com.sadadream.dto;
 import java.util.Date;
 
 import com.github.dozermapper.core.Mapping;
+import com.sadadream.domain.Gender;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,8 +39,8 @@ public class UserRegistrationData {
     @Mapping("address")
     private final String address;
 
-    @Mapping("sex")
-    private final Boolean sex;
+    @Mapping("gender")
+    private final Gender gender;
 
     @Mapping("birthDate")
     private final Date birthDate;
