@@ -1,15 +1,19 @@
 package com.sadadream.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import com.sadadream.dto.Gender;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 @Entity
 @Getter
@@ -31,9 +35,10 @@ public class User {
 
     private String address;
 
-    private Boolean sex;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @Builder.Default
     private boolean deleted = false;
