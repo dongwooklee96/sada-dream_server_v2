@@ -1,15 +1,16 @@
 package com.sadadream.dto;
 
-import java.util.Date;
-
-import com.github.dozermapper.core.Mapping;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import java.time.LocalDate;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.github.dozermapper.core.Mapping;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder
@@ -37,9 +38,9 @@ public class UserRegistrationData {
     @Mapping("address")
     private final String address;
 
-    @Mapping("sex")
-    private final Boolean sex;
+    @Mapping("gender")
+    private final Gender gender;
 
     @Mapping("birthDate")
-    private final Date birthDate;
+    private final LocalDate birthDate;
 }
