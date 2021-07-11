@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 4
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: pass
+    platform: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_schema: db
+
+jwt:
+  secret: "12345678901234567890123456789010"
