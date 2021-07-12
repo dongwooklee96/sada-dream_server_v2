@@ -6,6 +6,7 @@ import com.sadadream.dto.UserModificationData;
 import com.sadadream.dto.UserRegistrationData;
 import com.sadadream.dto.UserResultData;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/users")
 @CrossOrigin
+@Slf4j
 public class UserController {
     private final UserService userService;
 

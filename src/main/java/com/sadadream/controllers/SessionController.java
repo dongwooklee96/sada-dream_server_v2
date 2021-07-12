@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import com.sadadream.application.AuthenticationService;
 import com.sadadream.dto.SessionRequestData;
 import com.sadadream.dto.SessionResponseData;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -17,6 +18,7 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping(value = "/session", produces = "application/json")
 @CrossOrigin
+@Slf4j
 public class SessionController {
     private final AuthenticationService authenticationService;
 

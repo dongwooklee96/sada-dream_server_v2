@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,7 +25,9 @@ import com.sadadream.dto.ProductData;
 @RestController
 @RequestMapping("/products")
 @CrossOrigin
+@Slf4j
 public class ProductController {
+
     private final ProductService productService;
 
     public ProductController(ProductService productService) {
