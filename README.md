@@ -1,5 +1,4 @@
 # 사다드림 V2
----
 [![codecov](https://codecov.io/gh/dongwooklee96/sada-dream_server_v2/branch/master/graph/badge.svg?token=X4CG17QDWR)](https://codecov.io/gh/dongwooklee96/sada-dream_server_v2)
 
 해외직구 대행 서비스인 `사다드림` 은 여행자가 여행을 마치고 돌아올 떄, 직접 해외 상품을 구매대행 해주는 서비스입니다.
@@ -25,7 +24,7 @@
 
 
 ```
-{server-env}/v2/api-docs
+http://localhost:8080/swagger-ui/
 ```
 
 스웨거 문서는 위의 주소로 접속하여 확인할 수 있습니다.
