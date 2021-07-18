@@ -3,6 +3,7 @@ package com.sadadream.controllers;
 import com.sadadream.application.AuthenticationService;
 import com.sadadream.application.ProductService;
 import com.sadadream.domain.Product;
+import com.sadadream.domain.Role;
 import com.sadadream.dto.ProductData;
 import com.sadadream.errors.InvalidTokenException;
 import com.sadadream.errors.ProductNotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -82,6 +84,9 @@ class ProductControllerTest {
 
         given(authenticationService.parseToken(INVALID_TOKEN))
                 .willThrow(new InvalidTokenException(INVALID_TOKEN));
+
+        given(authenticationService.roles(1L))
+            .willReturn(Arrays.asList(new Role("USER")));
     }
 
     @Test
