@@ -1,11 +1,25 @@
 spring:
+  server:
+    port: 8080
+    shutdown: graceful
+    servlet:
+      charset: UTF-8
+      enable: ture
+      force: ture
+  loggin:
+    level:
+      org.springframework.web:info
+
   datasource:
     hikari:
-      maximum-pool-size: 4
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      connection-init-sql: SET TIME ZONE 'UTC'
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: pass
     platform: postgres
+#    schema: classpath:/schema.sql
   jpa:
     hibernate:
       ddl-auto: update

@@ -1,5 +1,7 @@
 package com.sadadream.application;
 
+import com.sadadream.domain.Role;
+import com.sadadream.domain.RoleRepository;
 import com.sadadream.domain.User;
 import com.sadadream.domain.UserRepository;
 import com.sadadream.dto.UserModificationData;
@@ -11,6 +13,7 @@ import com.github.dozermapper.core.Mapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -30,13 +33,14 @@ class UserServiceTest {
     private UserService userService;
 
     private final UserRepository userRepository = mock(UserRepository.class);
+    private final RoleRepository roleRepository = mock(RoleRepository.class);
 
     @BeforeEach
     void setUp() {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        userService = new UserService(mapper, userRepository, passwordEncoder);
+        userService = new UserService(mapper, userRepository, roleRepository, passwordEncoder);
 
         given(userRepository.existsByEmail(EXISTED_EMAIL_ADDRESS))
                 .willReturn(true);
@@ -81,6 +85,7 @@ class UserServiceTest {
         assertThat(user.getName()).isEqualTo("Tester");
 
         verify(userRepository).save(any(User.class));
+        verify(roleRepository).save(any(Role.class));
     }
 
     @Test
@@ -104,7 +109,8 @@ class UserServiceTest {
                 .password("TEST")
                 .build();
 
-        User user = userService.updateUser(1L, modificationData);
+        Long userId = 1L;
+        User user = userService.updateUser(1L, modificationData, userId);
 
         assertThat(user.getId()).isEqualTo(1L);
         assertThat(user.getEmail()).isEqualTo(EXISTED_EMAIL_ADDRESS);
@@ -120,11 +126,13 @@ class UserServiceTest {
                 .password("TEST")
                 .build();
 
-        assertThatThrownBy(() -> userService.updateUser(100L, modificationData))
+        Long userId = 100L;
+        assertThatThrownBy(() -> userService.updateUser(100L, modificationData, userId))
                 .isInstanceOf(UserNotFoundException.class);
 
         verify(userRepository).findByIdAndDeletedIsFalse(100L);
     }
+
 
 
     @Test
@@ -134,12 +142,29 @@ class UserServiceTest {
                 .password("TEST")
                 .build();
 
+        Long userId = DELETED_USER_ID;
         assertThatThrownBy(
-                () -> userService.updateUser(DELETED_USER_ID, modificationData)
+                () -> userService.updateUser(DELETED_USER_ID, modificationData, userId)
         )
                 .isInstanceOf(UserNotFoundException.class);
 
         verify(userRepository).findByIdAndDeletedIsFalse(DELETED_USER_ID);
+    }
+
+    @Test
+    void updateUserByOthersAccess() {
+        UserModificationData modificationData = UserModificationData.builder()
+            .name("TEST")
+            .password("TEST")
+            .build();
+
+        Long targetUserId = 1L;
+        Long currentUserId = 2L;
+
+        assertThatThrownBy(() -> {
+            userService.updateUser(
+                targetUserId, modificationData, currentUserId);
+        }).isInstanceOf(AccessDeniedException.class);
     }
 
     @Test
