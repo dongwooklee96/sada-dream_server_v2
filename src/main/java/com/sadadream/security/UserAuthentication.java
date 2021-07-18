@@ -1,16 +1,18 @@
 package com.sadadream.security;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import com.sadadream.domain.Role;
+
 public class UserAuthentication extends AbstractAuthenticationToken {
 	private final Long userId;
-	public UserAuthentication(Long userId) {
-		super(authorities());
+	public UserAuthentication(Long userId, List<Role> roles) {
+		super(authorities(userId, roles));
 		this.userId = userId;
 	}
 
@@ -29,15 +31,18 @@ public class UserAuthentication extends AbstractAuthenticationToken {
 		return true;
 	}
 
+	public Long getUserId() {
+		return this.userId;
+	}
+
 	@Override
 	public String toString() {
 		return "Authentication: userID -> (" + userId + ")";
 	}
 
-	private static List<GrantedAuthority> authorities() {
-		List<GrantedAuthority> authorities = new ArrayList<>();
-		// 권한 처리를 할 수 있다.
-		authorities.add(new SimpleGrantedAuthority("USER"));
-		return authorities;
+	private static List<GrantedAuthority> authorities(Long userId, List<Role> roles) {
+		return roles.stream()
+			.map(role -> new SimpleGrantedAuthority(role.getRole()))
+			.collect(Collectors.toList());
 	}
 }

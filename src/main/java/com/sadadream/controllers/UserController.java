@@ -1,15 +1,25 @@
 package com.sadadream.controllers;
 
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.sadadream.application.UserService;
 import com.sadadream.domain.User;
 import com.sadadream.dto.UserModificationData;
 import com.sadadream.dto.UserRegistrationData;
 import com.sadadream.dto.UserResultData;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import com.sadadream.security.UserAuthentication;
 
 @RestController
 @RequestMapping("/users")
@@ -29,16 +39,20 @@ public class UserController {
     }
 
     @PatchMapping("{id}")
+    @PreAuthorize("isAuthenticated() and hasAuthority('USER')")
     UserResultData update(
             @PathVariable Long id,
-            @RequestBody @Valid UserModificationData modificationData
+            @RequestBody @Valid UserModificationData modificationData,
+            UserAuthentication authentication
     ) {
-        User user = userService.updateUser(id, modificationData);
+        Long userId = authentication.getUserId();
+        User user = userService.updateUser(id, modificationData, userId);
         return getUserResultData(user);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("isAuthenticated() and hasAuthority('ADMIN')")
     void destroy(@PathVariable Long id) {
         userService.deleteUser(id);
     }

@@ -50,7 +50,7 @@ public class User {
     private boolean deleted = false;
 
     public void changeWith(User source) {
-        name = source.name;
+        this.name = source.getName();
     }
 
     public void changePassword(String password, PasswordEncoder passwordEncoder) {
