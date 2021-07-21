@@ -19,13 +19,12 @@ spring:
     username: postgres
     password: pass
     platform: postgres
-#    schema: classpath:/schema.sql
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
-        default_schema: db
+        default_schema: public
 
 jwt:
   secret: "12345678901234567890123456789010"
