@@ -1,0 +1,37 @@
+spring:
+  profiles: prod
+  server:
+    port: 8080
+    shutdown: graceful
+    servlet:
+      charset: UTF-8
+      enable: ture
+      force: ture
+  loggin:
+    level:
+      org.springframework.web:info
+
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      connection-init-sql: SET TIME ZONE 'UTC'
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: pass
+    platform: postgres
+    schema: classpath*:database/production/schema.sql
+    data: classpath*:database/production/data.sql
+    initialization-mode: always
+    sql-script-encoding: UTF-8
+    continue-on-error: true
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        default_schema: public
+
+jwt:
+  secret: "12345678901234567890123456789010"
