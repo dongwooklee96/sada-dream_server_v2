@@ -74,6 +74,9 @@ dependencies {
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    // HATEOAS
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+
     // Spring Developer Tools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
