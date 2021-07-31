@@ -32,7 +32,7 @@ import javax.persistence.SequenceGenerator;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class Product extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,6 +45,10 @@ public class Product {
 
     private String imageUrl;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @Setter
+    private User user;
     public void changeWith(Product source) {
         this.name = source.name;
         this.maker = source.maker;
