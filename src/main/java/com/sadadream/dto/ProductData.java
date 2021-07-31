@@ -1,10 +1,17 @@
 package com.sadadream.dto;
 
-import com.github.dozermapper.core.Mapping;
-import lombok.*;
+import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import com.github.dozermapper.core.Mapping;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Setter
 @Getter
@@ -12,20 +19,28 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductData {
-    private Long id;
+    @NotBlank
+    @Mapping("brand")
+    private String brand;
 
     @NotBlank
     @Mapping("name")
     private String name;
 
-    @NotBlank
-    @Mapping("maker")
-    private String maker;
-
     @NotNull
     @Mapping("price")
-    private Integer price;
+    private String price;
 
-    @Mapping("imageUrl")
-    private String imageUrl;
+    @NotNull
+    @Mapping("currency")
+    private String currency;
+
+    @Mapping("imageLink")
+    private List<String> imageLink;
+
+    @Mapping("description")
+    private String description;
+
+    @Mapping("category")
+    private String category;
 }
