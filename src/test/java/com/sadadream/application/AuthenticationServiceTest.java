@@ -1,5 +1,21 @@
 package com.sadadream.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.sadadream.domain.Role;
 import com.sadadream.domain.RoleRepository;
 import com.sadadream.domain.User;
@@ -7,21 +23,6 @@ import com.sadadream.domain.UserRepository;
 import com.sadadream.errors.InvalidTokenException;
 import com.sadadream.errors.LoginFailException;
 import com.sadadream.utils.JwtUtil;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 class AuthenticationServiceTest {
     private static final String SECRET = "12345678901234567890123456789012";
@@ -44,8 +45,11 @@ class AuthenticationServiceTest {
         authenticationService = new AuthenticationService(
             userRepository, roleRepository, jwtUtil, passwordEncoder);
 
-        User user = User.builder().id(1L).build();
-        user.changePassword("test", passwordEncoder);
+        User user = User.builder()
+            .id(1L)
+            .build();
+
+        user.changePassword("valid_password", passwordEncoder);
 
         given(userRepository.findByEmail("tester@example.com"))
             .willReturn(Optional.of(user));
@@ -56,25 +60,28 @@ class AuthenticationServiceTest {
             .willReturn(Arrays.asList(new Role("USER"), new Role("ADMIN")));
     }
 
+    @DisplayName("올바른 아이디와 패스워드로 로그인을 했을 때 성공한다.")
     @Test
     void loginWithRightEmailAndPassword() {
         String accessToken = authenticationService.login(
-                "tester@example.com", "test");
+                "tester@example.com", "valid_password");
 
         assertThat(accessToken).isEqualTo(VALID_TOKEN);
 
         verify(userRepository).findByEmail("tester@example.com");
     }
 
+    @DisplayName("잘못된 이메일로 로그인을 시도 했을 때 예외가 발생한다.")
     @Test
     void loginWithWrongEmail() {
         assertThatThrownBy(
-                () -> authenticationService.login("badguy@example.com", "test")
+                () -> authenticationService.login("wrong@example.com", "test")
         ).isInstanceOf(LoginFailException.class);
 
-        verify(userRepository).findByEmail("badguy@example.com");
+        verify(userRepository).findByEmail("wrong@example.com");
     }
 
+    @DisplayName("잘못된 비밀번호로 로그인을 시도 했을 때 예외가 발생한다.")
     @Test
     void loginWithWrongPassword() {
         assertThatThrownBy(
@@ -84,6 +91,7 @@ class AuthenticationServiceTest {
         verify(userRepository).findByEmail("tester@example.com");
     }
 
+    @DisplayName("특정 유저의 유효한 액세스 토큰을 파싱하면, 해당 유저의 정보를 반환한다.")
     @Test
     void parseTokenWithValidToken() {
         Long userId = authenticationService.parseToken(VALID_TOKEN);
@@ -91,6 +99,7 @@ class AuthenticationServiceTest {
         assertThat(userId).isEqualTo(1L);
     }
 
+    @DisplayName("유효하지 않은 형식의 토큰을 파싱하면, 예외가 발생한다.")
     @Test
     void parseTokenWithInvalidToken() {
         assertThatThrownBy(
@@ -98,14 +107,17 @@ class AuthenticationServiceTest {
         ).isInstanceOf(InvalidTokenException.class);
     }
 
+    @DisplayName("유저의 권한 정보를 조회하였을 때 유효한 권한 정보를 반환한다.")
     @Test
     void roles() {
-        assertThat(authenticationService.roles(1L).stream()
+        assertThat(authenticationService.roles(1L)
+            .stream()
             .map(Role::getRole)
             .collect(Collectors.toList()))
             .isEqualTo(Arrays.asList("USER"));
 
-        assertThat(authenticationService.roles(1004L).stream()
+        assertThat(authenticationService.roles(1004L)
+            .stream()
             .map(Role::getRole)
             .collect(Collectors.toList()))
             .isEqualTo(Arrays.asList("USER", "ADMIN"));
