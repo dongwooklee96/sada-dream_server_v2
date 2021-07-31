@@ -74,6 +74,9 @@ dependencies {
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    // HATEOAS
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+
     // Spring Developer Tools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
@@ -84,6 +87,8 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+    // H2
+    testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
 }
 
 application {
