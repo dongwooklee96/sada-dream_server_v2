@@ -1,35 +1,28 @@
-// 고양이 장난감 쇼핑몰
-// Product 모델
-// User 모델
-// Order 모델
-// ... 모델
-// Application (UseCase)
-// Product -> 관리자 등록/수정/삭제 -> list/detail
-// 주문 -> 확인 -> 배송 등 처리
-
-// Product
-// 0. 식별자 - identifier (ID)
-// 1. 이름 - 쥐돌이
-// 2. 제조사 - 냥이월드
-// 3. 가격 - 5,000원 (판매가)
-// 4. 이미지 - static, CDN => image URL
-
 package com.sadadream.domain;
+
+import java.util.List;
+
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import lombok.Setter;
 
 @Entity
-@Getter
+@Table(name = "product")
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
@@ -37,18 +30,28 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String brand;
+
     private String name;
 
-    private String maker;
+    private String price;
 
-    private Integer price;
+    private String currency;
 
-    private String imageUrl;
+    @ElementCollection
+    private List<String> imageLink;
+
+    private String description;
+
+    private String category;
 
     public void changeWith(Product source) {
+        this.brand = source.brand;
         this.name = source.name;
-        this.maker = source.maker;
         this.price = source.price;
-        this.imageUrl = source.imageUrl;
+        this.currency = source.currency;
+        this.imageLink = source.imageLink;
+        this.description = source.description;
+        this.category = source.category;
     }
 }
