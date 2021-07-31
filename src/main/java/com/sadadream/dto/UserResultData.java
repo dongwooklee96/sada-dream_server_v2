@@ -13,4 +13,6 @@ public class UserResultData {
     private final String email;
 
     private final String name;
+
+    private final String address;
 }

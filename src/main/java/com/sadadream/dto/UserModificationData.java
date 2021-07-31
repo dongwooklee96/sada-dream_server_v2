@@ -1,12 +1,15 @@
 package com.sadadream.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+import org.springframework.context.support.GenericXmlApplicationContext;
+
 import com.github.dozermapper.core.Mapping;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Getter
 @Builder
@@ -16,8 +19,9 @@ public class UserModificationData {
     @Mapping("name")
     private final String name;
 
-    @NotBlank
-    @Size(min = 4, max = 1024)
-    @Mapping("password")
-    private final String password;
+    @Mapping("address")
+    private final String address;
+
+    @Mapping("gender")
+    private final Gender gender;
 }

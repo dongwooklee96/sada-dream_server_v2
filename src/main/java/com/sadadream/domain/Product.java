@@ -25,7 +25,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class Product extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,6 +45,10 @@ public class Product {
 
     private String category;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @Setter
+    private User user;
     public void changeWith(Product source) {
         this.brand = source.brand;
         this.name = source.name;

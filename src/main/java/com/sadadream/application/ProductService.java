@@ -2,9 +2,13 @@ package com.sadadream.application;
 
 import com.sadadream.domain.Product;
 import com.sadadream.domain.ProductRepository;
+import com.sadadream.domain.User;
+import com.sadadream.domain.UserRepository;
 import com.sadadream.dto.ProductData;
 import com.sadadream.errors.ProductNotFoundException;
 import com.github.dozermapper.core.Mapper;
+import com.sadadream.errors.UserNotFoundException;
+
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,13 +19,15 @@ import java.util.List;
 public class ProductService {
     private final Mapper mapper;
     private final ProductRepository productRepository;
-
+    private final UserRepository userRepository;
     public ProductService(
             Mapper dozerMapper,
-            ProductRepository productRepository
+            ProductRepository productRepository,
+             UserRepository userRepository
     ) {
         this.mapper = dozerMapper;
         this.productRepository = productRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Product> getProducts() {
@@ -32,8 +38,14 @@ public class ProductService {
         return findProduct(id);
     }
 
-    public Product createProduct(ProductData productData) {
+    public Product createProduct(ProductData productData, Long userId) {
+
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException(userId));
+
         Product product = mapper.map(productData, Product.class);
+        product.setUser(user);
+
         return productRepository.save(product);
     }
 
