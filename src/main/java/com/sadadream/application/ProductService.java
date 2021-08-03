@@ -1,18 +1,19 @@
 package com.sadadream.application;
 
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+
+import com.github.dozermapper.core.Mapper;
 import com.sadadream.domain.Product;
 import com.sadadream.domain.ProductRepository;
 import com.sadadream.domain.User;
 import com.sadadream.domain.UserRepository;
 import com.sadadream.dto.ProductData;
 import com.sadadream.errors.ProductNotFoundException;
-import com.github.dozermapper.core.Mapper;
 import com.sadadream.errors.UserNotFoundException;
-
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 @Transactional

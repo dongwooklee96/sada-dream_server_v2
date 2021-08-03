@@ -2,16 +2,17 @@ package com.sadadream.application;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.sadadream.domain.Role;
 import com.sadadream.domain.RoleRepository;
 import com.sadadream.domain.User;
 import com.sadadream.domain.UserRepository;
 import com.sadadream.errors.LoginFailException;
 import com.sadadream.utils.JwtUtil;
-import io.jsonwebtoken.Claims;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import io.jsonwebtoken.Claims;
 
 @Service
 public class AuthenticationService {

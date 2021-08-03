@@ -1,5 +1,12 @@
 package com.sadadream.application;
 
+import javax.transaction.Transactional;
+
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.github.dozermapper.core.Mapper;
 import com.sadadream.domain.Role;
 import com.sadadream.domain.RoleRepository;
 import com.sadadream.domain.User;
@@ -8,13 +15,6 @@ import com.sadadream.dto.UserModificationData;
 import com.sadadream.dto.UserRegistrationData;
 import com.sadadream.errors.UserEmailDuplicationException;
 import com.sadadream.errors.UserNotFoundException;
-import com.github.dozermapper.core.Mapper;
-
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 @Service
 @Transactional
