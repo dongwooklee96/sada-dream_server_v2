@@ -6,4 +6,4 @@ spring:
   application:
     name: sada-dream_v2
   profiles:
-    active: prod
+    active: dev
